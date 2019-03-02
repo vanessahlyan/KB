@@ -1,5 +1,6 @@
 package com.example.vanessayan.kb;
 
+import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
@@ -7,23 +8,31 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class FormReader {
     public static final int UTF_CONVERSION = 8;
     public static final int VERSION = 1;
+    private Context mContext;
     /* This function assumes that the form builder app outputs a csv file with lines reading "fieldname, type, max"
      * The form builder app also asks the user for the size of their nfc tag.
      */
 
+    public FormReader(Context context) {
+        mContext = context;
+//        InputStream source = (InputStream) mContext.getResources().openRawResource(R.raw.sampleresponses);
+//        JSONObject read = ReadCSV(source);
+    }
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public JSONObject ReadCSV(String csvFile) {
+    public JSONObject ReadCSV(InputStream csvStream) {
         ArrayList<ArrayList> store = new ArrayList<>();
         JSONObject form = new JSONObject();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(csvStream))) {
             int totalBits = 0;
             String line;
             while ((line = br.readLine()) != null) {
